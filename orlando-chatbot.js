@@ -1,4 +1,7 @@
 (function() {
+    // Generate unique session ID for this browser tab
+    const SESSION_ID = 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+    
     // Create chat widget HTML
     const widgetHTML = `
         <div id="orlando-chat-widget" style="position:fixed;bottom:20px;right:20px;width:350px;height:500px;background:white;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);display:none;flex-direction:column;font-family:Arial,sans-serif;z-index:9999;border:1px solid #ddd;">
@@ -63,7 +66,10 @@
             const response = await fetch('https://victors-team-free.n8nme.com/webhook/orlando-chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: text})
+                body: JSON.stringify({
+                    message: text,
+                    sessionId: SESSION_ID
+                })
             });
             const data = await response.json();
             addMessage(data.response || data.message || "Sorry, I didn't understand that.", false);
